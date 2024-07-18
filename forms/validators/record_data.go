@@ -155,9 +155,6 @@ func (validator *RecordDataValidator) checkTextValue(field *schema.SchemaField, 
 
 func (validator *RecordDataValidator) checkNumberValue(field *schema.SchemaField, value any) error {
 	val, _ := value.(float64)
-	if val == 0 {
-		return nil // nothing to check (skip zero-defaults)
-	}
 
 	options, _ := field.Options.(*schema.NumberOptions)
 
@@ -171,6 +168,10 @@ func (validator *RecordDataValidator) checkNumberValue(field *schema.SchemaField
 
 	if options.Max != nil && val > *options.Max {
 		return validation.NewError("validation_max_number_constraint", fmt.Sprintf("Must be less than %f", *options.Max))
+	}
+
+	if options.NonZero && val == 0 {
+		return validation.NewError("validation_non_zero_constraint", fmt.Sprintf("Must not be zero"))
 	}
 
 	return nil

@@ -18,7 +18,6 @@
     const customRequiredLabels = {
         // type => label
         bool: "Nonfalsey",
-        number: "Nonzero",
     };
 
     export let key = "";

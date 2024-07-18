@@ -478,6 +478,7 @@ type NumberOptions struct {
 	Min       *float64 `form:"min" json:"min"`
 	Max       *float64 `form:"max" json:"max"`
 	NoDecimal bool     `form:"noDecimal" json:"noDecimal"`
+	NonZero   bool     `form:"nonZero" json:"nonZero"`
 }
 
 func (o NumberOptions) Validate() error {
@@ -488,6 +489,7 @@ func (o NumberOptions) Validate() error {
 
 	return validation.ValidateStruct(&o,
 		validation.Field(&o.Min, validation.By(o.checkNoDecimal)),
+		validation.Field(&o.NonZero, validation.By(o.checkNonZero)),
 		validation.Field(&o.Max, maxRules...),
 	)
 }
@@ -500,6 +502,19 @@ func (o *NumberOptions) checkNoDecimal(value any) error {
 
 	if *v != float64(int64(*v)) {
 		return validation.NewError("validation_no_decimal_constraint", "Decimal numbers are not allowed.")
+	}
+
+	return nil
+}
+
+func (o *NumberOptions) checkNonZero(value any) error {
+	v, _ := value.(*float64)
+	if v == nil || !o.NonZero {
+		return nil // nothing to check
+	}
+
+	if *v == 0 {
+		return validation.NewError("validation_zero", "number may not be zero.")
 	}
 
 	return nil
