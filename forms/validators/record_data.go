@@ -170,7 +170,7 @@ func (validator *RecordDataValidator) checkNumberValue(field *schema.SchemaField
 		return validation.NewError("validation_max_number_constraint", fmt.Sprintf("Must be less than %f", *options.Max))
 	}
 
-	if options.NonZero && val == 0 {
+	if options.NonZero && val == 0 && value != nil {
 		return validation.NewError("validation_non_zero_constraint", fmt.Sprintf("Must not be zero"))
 	}
 

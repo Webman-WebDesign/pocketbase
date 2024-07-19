@@ -8,7 +8,7 @@
     export let pinnedIds;
 
     $: isPinned = pinnedIds.includes(collection.id);
-
+    
     function toggleCollectionPin(collection) {
         if (pinnedIds.includes(collection.id)) {
             CommonHelper.removeByValue(pinnedIds, collection.id);

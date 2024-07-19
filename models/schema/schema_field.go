@@ -150,7 +150,11 @@ type SchemaField struct {
 func (f *SchemaField) ColDefinition() string {
 	switch f.Type {
 	case FieldTypeNumber:
-		return "NUMERIC DEFAULT 0 NOT NULL"
+		if f.Required {
+			return "NUMERIC DEFAULT 0 NOT NULL"
+		} else {
+			return "NUMERIC DEFAULT 0"
+		}
 	case FieldTypeBool:
 		return "BOOLEAN DEFAULT FALSE NOT NULL"
 	case FieldTypeJson:
@@ -342,7 +346,10 @@ func (f *SchemaField) PrepareValue(value any) any {
 		val, _ = types.ParseJsonRaw(val)
 		return val
 	case FieldTypeNumber:
-		return cast.ToFloat64(value)
+		if value != nil {
+			return cast.ToFloat64(value)
+		}
+		return nil
 	case FieldTypeBool:
 		return cast.ToBool(value)
 	case FieldTypeDate:

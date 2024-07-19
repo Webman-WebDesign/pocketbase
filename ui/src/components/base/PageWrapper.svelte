@@ -6,7 +6,7 @@
 </script>
 
 <div class="page-wrapper {classes}" class:center-content={center}>
-    <main class="page-content">
+    <main class="page-content">      
         <slot />
     </main>
 
